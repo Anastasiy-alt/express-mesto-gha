@@ -14,8 +14,8 @@ app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)
 })
 
-app.use('/', require('./routes/user'));
-app.use('/', require('./routes/card'));
+app.use('/', require('./routes/users'));
+app.use('/', require('./routes/cards'));
 
 app.use((req, res, next) => {
   req.user = {
@@ -28,10 +28,4 @@ app.use((req, res, next) => {
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
 
-module.exports.createCard = (req, res) => {
-  console.log(req.user._id); // _id станет доступен
-};
-
 // module.exports = mongoose.model('mestodb', mestodb);
-
-// 63510c1b738290dc89d2156a
