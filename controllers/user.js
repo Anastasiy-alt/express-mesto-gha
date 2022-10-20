@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 module.exports.getUser = (req, res) => {
   User.find({})
-    .then(user => res.send(user))
+    .then(user => res.send({data: user}))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 

@@ -14,13 +14,24 @@ app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`)
 })
 
-app.use('/', require('./routes/user'));
-app.use('/', require('./routes/card'));
+app.use('/', require('./routers/user'));
+app.use('/', require('./routers/card'));
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '63510c1b738290dc89d2156a' // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false
+  next();
 });
-module.exports = mongoose.model('mestodb', mestodb);
+
+mongoose.connect('mongodb://localhost:27017/mestodb');
+
+
+module.exports.createCard = (req, res) => {
+  console.log(req.user._id); // _id станет доступен
+};
+
+//module.exports = mongoose.model('mestodb', mestodb);
+
+// 63510c1b738290dc89d2156a
