@@ -3,31 +3,31 @@ const { errorsCatch } = require('../utils/errors');
 
 module.exports.getUser = (req, res) => {
   User.find({})
-    .then(user => res.status(200).send({data: user}))
-    .catch((err) => errorsCatch(err))
+    .then((user) => res.status(200).send({ data: user }))
+    .catch((err) => errorsCatch(err));
 };
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send({data: user}))
-    .catch((err) => errorsCatch(err))
+    .then((user) => res.status(200).send({ data: user }))
+    .catch((err) => errorsCatch(err));
 };
 
 module.exports.getUserId = (req, res) => {
   User.find({})
-    .then(user => res.send({user}))
-    .catch((err) => errorsCatch(err))
+    .then((user) => res.send({ user }))
+    .catch((err) => errorsCatch(err));
 };
 
 module.exports.updateProfile = (req, res) => {
   User.find({})
-    .then(user => res.send({data: req.user._id}))
-    .catch((err) => errorsCatch(err))
+    .then(() => res.send({ data: req.user._id }))
+    .catch((err) => errorsCatch(err));
 };
 
 module.exports.updateAvatar = (req, res) => {
   User.find({})
-    .then(user => res.send({data: req.user._id}))
-    .catch((err) => errorsCatch(err))
+    .then(() => res.send({ data: req.user._id }))
+    .catch((err) => errorsCatch(err));
 };
