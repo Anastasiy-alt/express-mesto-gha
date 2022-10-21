@@ -1,4 +1,5 @@
 const Card = require('../models/cards');
+const { errorsCatch } = require('../utils/errors');
 
 module.exports.createCard = (req, res) => {
   console.log(req.user._id);
@@ -6,7 +7,7 @@ module.exports.createCard = (req, res) => {
 
   Card.create({ name, owners, link, likes, createdAt })
     .then(card => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => errorsCatch(err))
 };
 
 
@@ -25,7 +26,7 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
 module.exports.getCard = (req, res) => {
   Card.find({})
     .then(card => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => errorsCatch(err))
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -37,5 +38,5 @@ module.exports.deleteCard = (req, res) => {
         return res.status(404).send({ message: 'Карточка или пользователь не найден.' });
       }
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => errorsCatch(err))
 };
