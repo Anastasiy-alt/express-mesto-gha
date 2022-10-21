@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
-
-
-// module.exports = mongoose.model('mestodb', mestodb);
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
