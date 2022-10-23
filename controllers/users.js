@@ -15,19 +15,29 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
-  User.find({})
+  User.findById(req.params.userId)
     .then((user) => res.send({ user }))
     .catch((err) => errorsCatch(err));
 };
 
 module.exports.updateProfile = (req, res) => {
-  User.find({})
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true },
+  )
     .then(() => res.send({ data: req.user._id }))
     .catch((err) => errorsCatch(err));
 };
 
 module.exports.updateAvatar = (req, res) => {
-  User.find({})
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true },
+  )
     .then(() => res.send({ data: req.user._id }))
     .catch((err) => errorsCatch(err));
 };
