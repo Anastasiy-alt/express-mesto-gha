@@ -15,16 +15,17 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
-app.use('/', require('./routes/users'));
-app.use('/', require('./routes/cards'));
-
 app.use((req, res, next) => {
   req.user = {
     _id: '63510c1b738290dc89d2156a', // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
-
   next();
 });
+
+app.use('/', require('./routes/users'));
+app.use('/', require('./routes/cards'));
+
+
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
