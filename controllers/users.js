@@ -1,5 +1,6 @@
+/* eslint-disable consistent-return */
 const User = require('../models/users');
-const { errorsCatch } = require('../utils/errors');
+const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
 
 module.exports.getUser = (req, res) => {
   User.find({})
@@ -16,7 +17,12 @@ module.exports.createUser = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => res.send({ user }))
+    .then((user) => {
+      if (!user) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+      }
+      return res.send({ user });
+    })
     .catch((err) => errorsCatch(err));
 };
 
@@ -27,7 +33,12 @@ module.exports.updateProfile = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => res.send({ user }))
+    .then((user) => {
+      if (!user) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+      }
+      return res.send({ user });
+    })
     .catch((err) => errorsCatch(err));
 };
 
@@ -38,6 +49,11 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => res.send({ user }))
+    .then((user) => {
+      if (!user) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+      }
+      return res.send({ user });
+    })
     .catch((err) => errorsCatch(err));
 };

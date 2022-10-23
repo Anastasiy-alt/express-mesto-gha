@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const Card = require('../models/cards');
-const { errorsCatch } = require('../utils/errors');
+const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
 
 module.exports.createCard = (req, res) => {
   const {
@@ -20,7 +20,12 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+      }
+      return res.send({ card });
+    })
     .catch((err) => errorsCatch(err));
 };
 
@@ -30,7 +35,12 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+      }
+      return res.send({ card });
+    })
     .catch((err) => errorsCatch(err));
 };
 
@@ -43,9 +53,10 @@ module.exports.getCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
+      if (!card) {
+        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
       }
+      return res.send({ card });
     })
     .catch((err) => errorsCatch(err));
 };
