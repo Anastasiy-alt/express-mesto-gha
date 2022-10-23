@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const Card = require('../models/cards');
 const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
 
