@@ -10,7 +10,11 @@ module.exports.getUser = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  User.create(
+    req.user._id,
+    { name, about, avatar },
+    { new: true, runValidators: true },
+  )
     .then((user) => res.send({ data: user }))
     .catch((err) => errorsCatch(err));
 };

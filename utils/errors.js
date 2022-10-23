@@ -10,7 +10,5 @@ module.exports.errorsCatch = (err, res) => {
 };
 
 module.exports = {
-  ERROR_CODE,
   ERROR_NOT_FOUND,
-  ERROR_STANDART,
 };
