@@ -27,7 +27,7 @@ module.exports.updateProfile = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then(() => res.send({ data: req.user._id }))
+    .then((user) => res.send({ user }))
     .catch((err) => errorsCatch(err));
 };
 
@@ -38,6 +38,6 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then(() => res.send({ data: req.user._id }))
+    .then((user) => res.send({ user }))
     .catch((err) => errorsCatch(err));
 };
