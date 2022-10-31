@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const NotFoundError = require('./errors/not-found-err');
-const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
+const { errorsCatch, ERROR_NOT_FOUND } = require('../errors/UnauthorizedError');
 
 module.exports.getUser = (req, res) => {
   User.find({})
@@ -21,10 +21,14 @@ module.exports.createUser = (req, res) => {
   })
     .then((user) => res.send({ data: user }))
     .catch((err) => errorsCatch(err));
+
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email: req.body.email,
-      password: hash, // записываем хеш в базу
+      password: hash,
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar, // записываем хеш в базу
     }))
     .then((user) => res.send(user))
     .catch((err) => res.status(400).send(err));

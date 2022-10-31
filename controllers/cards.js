@@ -1,5 +1,5 @@
 const Card = require('../models/cards');
-const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
+const { errorsCatch, ERROR_NOT_FOUND } = require('../errors/UnauthorizedError');
 
 module.exports.createCard = (req, res) => {
   const {
