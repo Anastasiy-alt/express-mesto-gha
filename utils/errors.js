@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const ERROR_CODE = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_STANDART = 500;

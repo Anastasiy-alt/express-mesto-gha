@@ -1,4 +1,6 @@
+/* eslint-disable import/no-unresolved */
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
 
@@ -67,4 +69,21 @@ module.exports.updateAvatar = (req, res) => {
       return res.send({ user });
     })
     .catch((err) => errorsCatch(err));
+};
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // создадим токен
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      // вернём токен
+      res.send({ token });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
 };
