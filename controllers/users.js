@@ -1,7 +1,9 @@
+/* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
+const NotFoundError = require('./errors/not-found-err');
 const { errorsCatch, ERROR_NOT_FOUND } = require('../utils/errors');
 
 module.exports.getUser = (req, res) => {
@@ -87,3 +89,13 @@ module.exports.login = (req, res) => {
         .send({ message: err.message });
     });
 };
+
+module.exports.getUserMe = (req, res, next) => User
+  .findOne({ _id: req.params.userId })
+  .then((user) => {
+    if (!user) {
+      throw new NotFoundError('Нет пользователя с таким id');
+    }
+    res.send(user);
+  })
+  .catch(next);
