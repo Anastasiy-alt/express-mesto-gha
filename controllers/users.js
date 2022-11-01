@@ -3,25 +3,21 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
-const NotFoundError = require('./errors/not-found-err');
-const { errorsCatch, ERROR_NOT_FOUND } = require('../errors/UnauthorizedError');
+const { NotFoundError, BadRequestError, ConflictError } = require('../errors/UnauthorizedError');
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.find({})
     .then((user) => res.send({ data: user }))
-    .catch((err) => errorsCatch(err));
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
   User.create({
     name, about, avatar, email,
-  })
-    .then((user) => res.send({ data: user }))
-    .catch((err) => errorsCatch(err));
-
+  });
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email: req.body.email,
@@ -30,54 +26,62 @@ module.exports.createUser = (req, res) => {
       about: req.body.about,
       avatar: req.body.avatar, // записываем хеш в базу
     }))
-    .then((user) => res.send(user))
-    .catch((err) => res.status(400).send(err));
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь с данным email уже существует'));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestError('Неверные данные пользователя.'));
+      } else {
+        next(err);
+      }
+    });
 };
 
-module.exports.getUserId = (req, res) => {
+module.exports.getUserId = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+        throw new NotFoundError('Нет пользователя с таким id');
       }
-      return res.send({ user });
+      res.send(user);
     })
-    .catch((err) => errorsCatch(err));
+    .catch(next);
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      if (!user) {
-        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+    .then((user) => res.send({ user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Данные не прошли валидацию.'));
       }
-      return res.send({ user });
-    })
-    .catch((err) => errorsCatch(err));
+      return next(err);
+    });
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      if (!user) {
-        return res.status(ERROR_NOT_FOUND).send({ message: `Произошла ошибка ${ERROR_NOT_FOUND}` });
+    .then((user) => res.send({ user }))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Данные не прошли валидацию.'));
       }
-      return res.send({ user });
-    })
-    .catch((err) => errorsCatch(err));
+      return next(err);
+    });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -87,11 +91,7 @@ module.exports.login = (req, res) => {
       // вернём токен
       res.send({ token });
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(next);
 };
 
 module.exports.getUserMe = (req, res, next) => User

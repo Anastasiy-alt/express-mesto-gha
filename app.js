@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const { login, createUser } = require('./controllers/users');
+const { loginValid, createUserValid } = require('./middlewares/validator');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -20,8 +21,8 @@ app.listen(PORT, () => {
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', loginValid, login);
+app.post('/signup', createUserValid, createUser);
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
