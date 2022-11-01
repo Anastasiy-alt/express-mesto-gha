@@ -31,7 +31,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.code === 11000) {
         next(new ConflictError('Пользователь с данным email уже существует'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError('Неверные данные пользователя.'));
+        next(new BadRequestError('Некорректные данные при создании карточки.'));
       } else {
         next(err);
       }
@@ -59,7 +59,7 @@ module.exports.updateProfile = (req, res, next) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Данные не прошли валидацию.'));
+        return next(new BadRequestError('Некорректные данные при создании карточки.'));
       }
       return next(err);
     });
@@ -75,7 +75,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Данные не прошли валидацию.'));
+        return next(new BadRequestError('Некорректные данные при создании карточки.'));
       }
       return next(err);
     });
@@ -94,12 +94,14 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getUserMe = (req, res, next) => User
-  .findOne({ _id: req.params.userId })
-  .then((user) => {
-    if (!user) {
-      throw new NotFoundError('Нет пользователя с таким id');
-    }
-    res.send(user);
-  })
-  .catch(next);
+module.exports.getUserMe = (req, res, next) => {
+  User
+    .findOne({ _id: req.params.userId })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Нет пользователя с таким id.');
+      }
+      res.send(user);
+    })
+    .catch(next);
+};
