@@ -7,7 +7,7 @@ const { NotFoundError, BadRequestError, ConflictError } = require('../errors/Una
 
 module.exports.getUser = (req, res, next) => {
   User.find({})
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch(next);
 };
 
