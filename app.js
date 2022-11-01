@@ -3,6 +3,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const auth = require('./middlewares/auth');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { login, createUser } = require('./controllers/users');
 const { loginValid, createUserValid } = require('./middlewares/validator');
@@ -18,11 +20,16 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
+app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
 app.post('/signin', loginValid, login);
 app.post('/signup', createUserValid, createUser);
+
+app.use('*', (req, res, next) => {
+  next(new NotFoundError('Страница не найдена.'));
+});
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
