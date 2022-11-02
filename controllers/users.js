@@ -14,24 +14,33 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  // const {
+  //   name, about, avatar, email, password,
+  // } = req.body;
+  const { email, password } = req.body;
+
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      // email,
-      email: req.body.email,
+      email,
+      // email: req.body.email,
       password: hash,
       name: req.body.name,
       about: req.body.about,
       avatar: req.body.avatar, // записываем хеш в базу
     }))
-    .then(() => res.send({
-      name, about, avatar, email,
+    .then((user) => res.status(200).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      _id: user._id,
+      email: user.email,
     }))
+    // .then(() => res.send({
+    //   name, about, avatar, email,
+    // }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с данным email уже существует'));
+        next(new ConflictError('Пользователь с данным email уже существует.'));
       } else if (err.name === 'ValidationError') {
         next(new BadRequestError('Некорректные данные при создании карточки.'));
       } else {
