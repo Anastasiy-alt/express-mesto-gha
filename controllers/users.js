@@ -106,8 +106,9 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getUserMe = (req, res, next) => {
+  const { _id } = req.user;
   User
-    .findOne(req.user._id)
+    .findById(_id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id.');
