@@ -23,7 +23,7 @@ const createUserValid = celebrate({
   }),
 });
 
-const updateProfileValid = celebrate({
+const updateAvatarValid = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().custom((url) => {
       if (!validator.isURL(url)) { throw new BadRequestError('Неправильный формат URL адреса'); }
@@ -32,7 +32,7 @@ const updateProfileValid = celebrate({
   }),
 });
 
-const updateAvatarValid = celebrate({
+const updateProfileValid = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -42,7 +42,7 @@ const updateAvatarValid = celebrate({
 const createCardValid = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().custom((url) => {
+    link: Joi.string().required().custom((url) => {
       if (!validator.isURL(url)) { throw new BadRequestError('Неправильный формат URL адреса'); }
       return url;
     }),

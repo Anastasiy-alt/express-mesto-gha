@@ -1,7 +1,9 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 const Card = require('../models/cards');
-const { NotFoundError, BadRequestError, ForbiddenError } = require('../errors/UnauthorizedError');
+const ForbiddenError = require('../errors/ForbiddenError');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
 
 module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
