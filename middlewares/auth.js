@@ -4,15 +4,7 @@ const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require('../errors/UnauthorizedError');
 
 const handleAuthError = (req, res, next) => {
-  res
-    .status(401)
-    .then((user) => {
-      if (!user) {
-        throw new UnauthorizedError('Необходима авторизация.');
-      }
-      res.send(user);
-    })
-    .catch(next);
+  next(new UnauthorizedError('Необходима авторизация.'));
 };
 
 const extractBearerToken = (header) => header.replace('Bearer ', '');
