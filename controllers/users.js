@@ -9,7 +9,7 @@ const NotFoundError = require('../errors/NotFoundError');
 
 module.exports.getUser = (req, res, next) => {
   User.find({})
-    .then((user) => res.send(user))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
