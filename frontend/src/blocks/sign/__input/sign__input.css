@@ -1,0 +1,15 @@
+.sign__input {
+    border-bottom: 2px solid #CCCCCC;
+    background-color: transparent;
+    color: #FFF;
+    margin-bottom: 30px;
+}
+
+.sign__input::placeholder {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #CCCCCC;
+}

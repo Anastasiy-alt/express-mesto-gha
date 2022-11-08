@@ -1,0 +1,14 @@
+.sign__signin {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    margin-bottom: clamp(40px, calc(0.5 * 100vw), 80px);
+}

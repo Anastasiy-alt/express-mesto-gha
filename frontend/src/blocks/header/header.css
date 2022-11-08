@@ -1,0 +1,18 @@
+.header{
+    width: min(calc(0.6875 * 100vw), 880px);
+    margin-top: clamp(28px, calc(0.03515625 * 100vw), 45px);
+    min-height: clamp(56px, calc(0.0578125 * 100vw), 74px);
+    border-bottom: 1px solid rgba(84, 84, 84, .7);
+    margin-bottom: 38px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+@media screen and (max-width: 425px) {
+    .header {
+        width: 100%;
+    }
+}

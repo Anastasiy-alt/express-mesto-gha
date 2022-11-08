@@ -1,0 +1,4 @@
+.sign {
+    display: flex;
+    flex-direction: column;
+}

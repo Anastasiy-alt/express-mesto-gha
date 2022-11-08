@@ -1,0 +1,14 @@
+.popup__close_for_img {
+    align-self: flex-end;
+    margin-bottom: 8px;
+    margin-right: -40px;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 625px) {
+    .popup__close_for_img {
+        margin-bottom: 16px;
+        margin-right: 0;
+        margin-left: 200px;
+    }
+}

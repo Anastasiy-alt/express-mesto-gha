@@ -1,0 +1,7 @@
+.sign__link {
+    margin-top: clamp(173px, calc(0.80093 * 100vw), 216px);
+    background-color: #FFF;
+    color: black;
+    border-radius: 2px;
+    margin-bottom: 15px;
+}

@@ -1,0 +1,14 @@
+.img-open__close {
+    align-self: flex-end;
+    margin-bottom: 8px;
+    margin-right: -40px;
+    background-color: transparent;
+}
+
+@media screen and (max-width: 625px) {
+    .img-open__close {
+        margin-bottom: 16px;
+        margin-right: 0;
+        margin-left: 200px;
+    }
+}
